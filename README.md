@@ -67,10 +67,12 @@ node --check src/assets/admin.js
 `.github/workflows/build-plugin.yml` が、GitHubへのすべてのpushと手動実行で次の処理を行います。
 
 1. PHP、JavaScript、期限処理の動作を検証
-2. `src/` の内容とライセンスからインストール可能な `simple-post-expiry.zip` を作成
-3. GitHub Actionsの成果物として30日間保存
+2. プラグインヘッダー、`VERSION` 定数、`Stable tag` の一致を検証
+3. `src/` の内容とライセンスからインストール可能な `simple-post-expiry.zip` を作成
+4. GitHub Actionsの成果物として30日間保存
 
 `v` で始まるタグをpushすると、ZIPを添付したGitHub Releaseも自動作成します。
+タグの先頭から `v` を除いた値とソースのバージョンが一致しない場合、ワークフローはZIPを公開せず失敗します。
 
 ```bash
 git tag v1.0.0

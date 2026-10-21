@@ -16,6 +16,36 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Validate version consistency
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          plugin_version="$(sed -nE 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*([^[:space:]]+).*$/\1/p' src/simple-post-expiry.php | head -n 1)"
+          constant_version="$(sed -nE "s/^[[:space:]]*const[[:space:]]+VERSION[[:space:]]*=[[:space:]]*'([^']+)';.*$/\1/p" src/simple-post-expiry.php | head -n 1)"
+          stable_version="$(sed -nE 's/^Stable tag:[[:space:]]*([^[:space:]]+).*$/\1/p' src/readme.txt | head -n 1)"
+
+          if [[ -z "$plugin_version" || -z "$constant_version" || -z "$stable_version" ]]; then
+            echo "::error title=Version not found::Could not read all three source version values."
+            exit 1
+          fi
+
+          if [[ "$plugin_version" != "$constant_version" || "$plugin_version" != "$stable_version" ]]; then
+            echo "::error title=Source version mismatch::Plugin header=$plugin_version, VERSION constant=$constant_version, Stable tag=$stable_version"
+            exit 1
+          fi
+
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            tag_version="${GITHUB_REF_NAME#v}"
+
+            if [[ "$tag_version" != "$plugin_version" ]]; then
+              echo "::error title=Tag version mismatch::Git tag=$GITHUB_REF_NAME, source version=$plugin_version"
+              exit 1
+            fi
+          fi
+
+          echo "Version consistency validated: $plugin_version"
+
       - name: Validate plugin
         run: |
           php -l src/simple-post-expiry.php

@@ -30,3 +30,16 @@
 - PHPファイルの構文確認は `php -l src/simple-post-expiry.php` で行います。
 - 動作チェックは `php tests/run.php` で行います。
 - WordPressへ導入する際は、`src/` の内容をプラグインディレクトリへ配置します。
+
+## Version Updates
+
+バージョン更新を指示された場合は、次の3か所を必ず同じ値へ変更してください。
+
+1. `src/simple-post-expiry.php` のプラグインヘッダー `Version`
+2. `src/simple-post-expiry.php` の `Simple_Post_Expiry::VERSION`
+3. `src/readme.txt` の `Stable tag`
+
+- 例: バージョン `0.2.0` のタグは `v0.2.0` とします。
+- タグを作成する前に、3か所の変更をコミットしてください。
+- `.github/workflows/build-plugin.yml` は3か所の一致をすべてのpushで検証し、`v*` タグのpushではタグから先頭の `v` を除いた値との一致も検証します。
+- 更新後は `rg -n "Version:|const VERSION|Stable tag" src` で値を確認してください。
