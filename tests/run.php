@@ -123,7 +123,7 @@ function assert_same( $expected, $actual, $message ) {
 	}
 }
 
-require dirname( __DIR__ ) . '/simple-post-expiry.php';
+require dirname( __DIR__ ) . '/src/simple-post-expiry.php';
 
 $parse_method = new ReflectionMethod( 'Simple_Post_Expiry', 'parse_local_datetime' );
 $parse_method->setAccessible( true );
