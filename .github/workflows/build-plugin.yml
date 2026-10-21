@@ -28,6 +28,7 @@ jobs:
           set -euo pipefail
           mkdir -p build/simple-post-expiry
           cp -R src/. build/simple-post-expiry/
+          cp LICENSE build/simple-post-expiry/LICENSE
           cd build
           zip -r ../simple-post-expiry.zip simple-post-expiry
 

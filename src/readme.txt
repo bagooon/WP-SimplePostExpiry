@@ -3,8 +3,8 @@ Tags: post, expiry, expiration, draft, cron
 Requires at least: 5.3
 Requires PHP: 7.4
 Stable tag: 1.0.0
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: MIT
+License URI: https://opensource.org/license/mit/
 
 指定した公開期限を過ぎた投稿を、自動的に下書きへ戻すシンプルなプラグインです。
 

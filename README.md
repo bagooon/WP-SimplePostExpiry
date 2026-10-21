@@ -23,6 +23,7 @@ WordPressの投稿に公開期限を設定し、期限を過ぎた公開済み�
 ```text
 .
 ├── .github/workflows/   # ZIP作成とGitHub Release公開
+├── LICENSE              # MITライセンス
 ├── src/                 # WordPressプラグインの配布物
 │   ├── assets/
 │   ├── readme.txt
@@ -66,7 +67,7 @@ node --check src/assets/admin.js
 `.github/workflows/build-plugin.yml` が、GitHubへのすべてのpushと手動実行で次の処理を行います。
 
 1. PHP、JavaScript、期限処理の動作を検証
-2. `src/` の内容からインストール可能な `simple-post-expiry.zip` を作成
+2. `src/` の内容とライセンスからインストール可能な `simple-post-expiry.zip` を作成
 3. GitHub Actionsの成果物として30日間保存
 
 `v` で始まるタグをpushすると、ZIPを添付したGitHub Releaseも自動作成します。
@@ -80,4 +81,4 @@ git push origin v1.0.0
 
 ## ライセンス
 
-GPL-2.0-or-later
+[MIT License](LICENSE)

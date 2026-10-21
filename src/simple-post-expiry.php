@@ -6,7 +6,8 @@
  * Requires at least: 5.3
  * Requires PHP:      7.4
  * Text Domain:       simple-post-expiry
- * License:           GPL-2.0-or-later
+ * License:           MIT
+ * License URI:       https://opensource.org/license/mit/
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
