@@ -1,0 +1,68 @@
+name: Build plugin ZIP
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Validate and package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate plugin
+        run: |
+          php -l src/simple-post-expiry.php
+          php -l tests/run.php
+          php tests/run.php
+          node --check src/assets/admin.js
+
+      - name: Build installable ZIP
+        run: |
+          set -euo pipefail
+          mkdir -p build/simple-post-expiry
+          cp -R src/. build/simple-post-expiry/
+          cd build
+          zip -r ../simple-post-expiry.zip simple-post-expiry
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: simple-post-expiry-${{ github.sha }}
+          path: simple-post-expiry.zip
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Publish GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download packaged plugin
+        uses: actions/download-artifact@v4
+        with:
+          name: simple-post-expiry-${{ github.sha }}
+
+      - name: Publish ZIP to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" simple-post-expiry.zip --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" simple-post-expiry.zip \
+              --title "Simple Post Expiry $GITHUB_REF_NAME" \
+              --generate-notes
+          fi

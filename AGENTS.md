@@ -17,8 +17,10 @@
 
 ## Repository Layout
 
+- `.github/workflows/`: プラグインZIPの作成とGitHub Release公開
 - `src/`: WordPressへ配置するプラグイン本体と配布用ファイル
 - `tests/`: WordPressを起動せずに実行できる軽量な動作チェック
+- `README.md`: 利用方法、開発方法、リリース手順
 
 ## Development Notes
 
